@@ -1,4 +1,5 @@
 import requests
+from keys import TOMTOM_API_KEY
 
 def get_traffic_flow(api_key, coordinates, zoom=10):
     """
