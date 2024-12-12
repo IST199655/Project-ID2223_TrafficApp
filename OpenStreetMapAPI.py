@@ -1,27 +1,23 @@
 import osmnx as ox
 
-# Define your bounding box coordinates
-north, south, east, west = 40.712200011529475, 40.7122, -74.04449999347214, -74.0445  # Example: Manhattan, NY
+def get_roads(point, radius, plot = False):
+    G = ox.graph_from_point(point, network_type="drive", dist=radius)
 
-# Fetch street network within the bounding box
-G = ox.graph_from_bbox([north, south, east, west], network_type='drive')
+    G_proj = ox.project_graph(G)
+    G2 = ox.consolidate_intersections(G_proj, rebuild_graph=True, tolerance=15, dead_ends=False)
 
-# Extract node and edge data
-node_df = ox.graph_to_gdfs(G, nodes=True)
-edge_df = ox.graph_to_gdfs(G, edges=True)
+    if plot:
+        ox.plot_graph(G2, edge_color="blue")
 
-# Filter edges representing streets
-street_edges = edge_df[edge_df['highway'] != 'footway']
+    nodes, edges = ox.graph_to_gdfs(G2)
+    return edges
 
-# Extract coordinates of street segments
-street_coords = []
-for _, row in street_edges.iterrows():
-    geom = row['geometry']
-    coords = list(geom.coords)
-    street_coords.extend(coords)
+if __name__ == '__main__':
+    point = 59.34318, 18.05141
+    radius = 1000
 
-# Print or visualize the extracted coordinates
-print(street_coords)
+    roads = get_roads(point, radius, plot = True)
 
-# Visualize the extracted street network (optional)
-ox.plot_graph(G)
+    print(roads.iloc[0]['geometry'])
+
+    
