@@ -10,13 +10,13 @@ def get_roads(point, radius, plot = False):
         ox.plot_graph(G2, edge_color="blue")
 
     nodes, edges = ox.graph_to_gdfs(G2)
-    return edges
+    return nodes, edges
 
 if __name__ == '__main__':
     point = 59.34318, 18.05141
     radius = 1000
 
-    roads = get_roads(point, radius, plot = True)
+    intersections, roads = get_roads(point, radius, plot = True)
 
     print(roads.iloc[0]['geometry'])
 
