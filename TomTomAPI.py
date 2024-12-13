@@ -1,6 +1,7 @@
 import requests
+from shapely.geometry import LineString
 from keys import TOMTOM_API_KEY
-from OpenStreetMapAPI import get_roads
+from OpenStreetMapAPI import get_grid
 
 def get_traffic_flow(api_key, coordinates, zoom=12):
     """
@@ -27,10 +28,27 @@ def get_traffic_flow(api_key, coordinates, zoom=12):
         return {"error": str(e)}
 
 def get_traffic_map(api_key, point, radius, zoom = 12):
-    roads = get_roads(point,radius)
+    grid = get_grid(point,radius)
+    traffic_map = []
+    c = 0
 
-    # while i =
-    traffic_map = None
+    while len(grid) > 0:
+        coordinates = grid.pop().coords.xy
+        coordinates = coordinates[1][0],coordinates[0][0]
+        response = get_traffic_flow(api_key,coordinates,zoom)
+
+        flow_segment = response.json()['flowSegmentData']
+        traffic_map.append(flow_segment)
+
+        line = flow_segment['coordinates']['coordinate']
+        line_coords = [(point['longitude'], point['latitude']) for point in line]
+        line = LineString(line_coords)
+        l_grid = len(grid)
+        grid = [p for p in grid if line.distance(p) > 1e-8]
+        print('eliminated:',l_grid - len(grid))
+
+        c +=1
+        print(c)
 
     return traffic_map
 
@@ -38,20 +56,34 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import json
 
-    coordinates = (40.730610, -73.935242)
+    coordinates = 59.34318, 18.05141 # Stockholm
+    radius = 1000
 
-    # Fetch and decode traffic flow information
-    traffic_info = get_traffic_flow(TOMTOM_API_KEY, coordinates, zoom = 12)
-    traffic_info = traffic_info.json()['flowSegmentData']
-    
-    line = traffic_info['coordinates']['coordinate']
-    xs = []
-    ys = []
-    for x in line:
-        xs.append(x['latitude'])
-        ys.append(x['longitude'])
-        
-    plt.plot(xs,ys)
+    traffic_map = get_traffic_map(TOMTOM_API_KEY, coordinates, radius)
+
+    for traffic_info in traffic_map:
+        line = traffic_info['coordinates']['coordinate']
+        xs = []
+        ys = []
+        for x in line:
+            xs.append(x['latitude'])
+            ys.append(x['longitude'])
+            
+        plt.plot(xs,ys)
     plt.show()
+
+    # # Fetch and decode traffic flow information
+    # traffic_info = get_traffic_flow(TOMTOM_API_KEY, coordinates, zoom = 12)
+    # traffic_info = traffic_info.json()['flowSegmentData']
+    
+    # line = traffic_info['coordinates']['coordinate']
+    # xs = []
+    # ys = []
+    # for x in line:
+    #     xs.append(x['latitude'])
+    #     ys.append(x['longitude'])
+        
+    # plt.plot(xs,ys)
+    # plt.show()
     
 
