@@ -1,10 +1,11 @@
 import osmnx as ox
 
-def get_roads(point, radius, plot = False):
+def get_roads(point, radius, plot = False, consolidate = True):
     G = ox.graph_from_point(point, network_type="drive", dist=radius)
 
-    G_proj = ox.project_graph(G)
-    G2 = ox.consolidate_intersections(G_proj, rebuild_graph=True, tolerance=15, dead_ends=False)
+    G2 = ox.project_graph(G)
+    if consolidate:
+        G2 = ox.consolidate_intersections(G2, rebuild_graph=True, tolerance=15, dead_ends=False)
 
     if plot:
         ox.plot_graph(G2, edge_color="blue")
@@ -22,8 +23,8 @@ def get_middle_of_roads(edges):
     edges = edges.drop(['fraction'], axis = 1)
     return edges
 
-def get_grid(point, radius):
-    roads = get_roads(point, radius)
+def get_grid(point, radius, consolidate = False):
+    roads = get_roads(point, radius, consolidate = consolidate)
 
     roads = get_middle_of_roads(roads)
 
@@ -33,7 +34,7 @@ if __name__ == '__main__':
     coordinates = 59.34318, 18.05141 # Stockholm
     radius = 1000
 
-    grid = get_roads(coordinates, radius, plot = True)
+    grid = get_roads(coordinates, radius, plot = True, consolidate = False)
 
     print(grid)
     print()

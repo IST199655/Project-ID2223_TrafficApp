@@ -44,17 +44,17 @@ def get_traffic_map(api_key, point, radius, zoom = 12):
         line_coords = [(point['longitude'], point['latitude']) for point in line]
         line = LineString(line_coords)
         l_grid = len(grid)
-        grid = [p for p in grid if line.distance(p) > 1e-8]
-        print('eliminated:',l_grid - len(grid))
+        grid = [p for p in grid if line.distance(p) > 1e-6]
+        if l_grid - len(grid) != 0:
+            print('eliminated:',l_grid - len(grid))
 
         c +=1
-        print(c)
+        print(c, end = '\r')
 
     return traffic_map
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
-    import json
 
     coordinates = 59.34318, 18.05141 # Stockholm
     radius = 1000
