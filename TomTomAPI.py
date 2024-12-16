@@ -2,6 +2,7 @@ import requests
 from shapely.geometry import LineString
 from keys import TOMTOM_API_KEY, TOMTOM_API_KEY2, TOMTOM_API_KEY3
 from OpenStreetMapAPI import get_grid
+import matplotlib.pyplot as plt
 
 def get_traffic_flow(api_key, coordinates, zoom=12):
     """
@@ -68,6 +69,39 @@ def get_grid_from_map(map):
 
     return grid
 
+import geopandas as gpd
+
+def get_grid_from_map_alt(map):
+    """
+    Efficiently calculates midpoints of flow segments in map_data.
+    
+    Parameters:
+        map_data (list): List of flow segments, where each segment contains
+                         'coordinates' with 'coordinate' as a list of
+                         longitude/latitude dictionaries.
+
+    Returns:
+        list: List of midpoints (as Shapely Points) in geographic coordinates (latitude/longitude).
+    """
+    # Step 1: Convert all LineStrings into a GeoDataFrame
+    lines = [
+        LineString([(point['longitude'], point['latitude']) for point in flow_segment['coordinates']['coordinate']])
+        for flow_segment in map
+    ]
+    gdf = gpd.GeoDataFrame(geometry=lines, crs="EPSG:4326")  # Assume input is in WGS84
+    
+    # Step 2: Project to a metric CRS for accurate length and interpolation
+    gdf_projected = gdf.to_crs(gdf.estimate_utm_crs())
+    
+    # Step 3: Calculate midpoints in the projected CRS
+    midpoints_projected = gdf_projected.geometry.apply(lambda line: line.interpolate(0.5 * line.length))
+    
+    # Step 4: Reproject midpoints back to geographic coordinates
+    midpoints = midpoints_projected.to_crs("EPSG:4326")
+    
+    return midpoints.tolist()  # Return list of Shapely Point objects
+
+
 def get_traffic_map_from_grid(api_key,grid, zoom = 12):
     traffic_map = []
     c = 0
@@ -91,6 +125,9 @@ def get_traffic_map_from_grid(api_key,grid, zoom = 12):
     return traffic_map
 
 def plot_traffic_map(traffic_map, name = 'figures/traffic_map.png'):
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
     for traffic_info in traffic_map:
         line = traffic_info['coordinates']['coordinate']
         xs = []
@@ -100,11 +137,16 @@ def plot_traffic_map(traffic_map, name = 'figures/traffic_map.png'):
             xs.append(x['longitude'])
             
         plt.plot(xs,ys)
+
+    ax.set_aspect('equal')
+
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+
     plt.savefig(name, bbox_inches='tight')
     plt.show()
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
     import pickle
 
     coordinates = 59.34318, 18.05141 # Stockholm
