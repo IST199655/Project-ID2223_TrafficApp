@@ -1,6 +1,11 @@
 import datetime
 import requests
 from keys import CALENDAR_API_KEY
+import pandas as pd
+
+import openmeteo_requests
+import requests_cache
+from retry_requests import retry
 
 def is_holiday():
     base_url = "https://calendarific.com/api/v2/holidays"
@@ -26,5 +31,35 @@ def is_holiday():
     else:
         return encoder[holiday[0]['primary_type']]
 
+def get_weather(coordinates):
+    # Setup the Open-Meteo API client with cache and retry on error
+    cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
+    retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
+    openmeteo = openmeteo_requests.Client(session=retry_session)
+
+    latitude,longitude = coordinates
+    today = datetime.datetime.now().date().isoformat()
+    features = ["temperature_2m_max", "temperature_2m_min", "precipitation_sum", "wind_speed_10m_max", "wind_direction_10m_dominant"]
+
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "start_date": today,
+        "end_date": today,
+        "latitude": latitude,
+        "longitude": longitude,
+        "daily": features
+    }
+    responses = openmeteo.weather_api(url, params=params)
+    response = responses[0]
+    daily = response.Daily()
+
+    df = pd.DataFrame([], columns=features)
+    df.loc[pd.to_datetime(daily.Time(), unit="s")] = [daily.Variables(i).ValuesAsNumpy()[0] for i in range(len(features))]
+
+    return df
+
 if __name__ == '__main__':
+    coordinates = 59.34318, 18.05141
+
+    print(get_weather(coordinates))
     print(is_holiday())

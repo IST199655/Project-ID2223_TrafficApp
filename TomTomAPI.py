@@ -62,7 +62,7 @@ def get_grid_from_map(map):
     grid = []
     for flow_segment in map:
         line_coords = [(point['longitude'], point['latitude']) for point in flow_segment['coordinates']['coordinate']]
-        line = LineString(line_coords, srid=4326)
+        line = LineString(line_coords)
         midpoint = line.interpolate(0.5 * line.length)
         grid.append(midpoint)
 
@@ -105,7 +105,7 @@ def plot_traffic_map(traffic_map, name = 'figures/traffic_map.png'):
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
-    import numpy as np
+    import pickle
 
     coordinates = 59.34318, 18.05141 # Stockholm
     radius = 1000
@@ -124,5 +124,7 @@ if __name__ == "__main__":
     traffic_map2 = get_traffic_map_from_grid(TOMTOM_API_KEY,grid, zoom = zoom)
 
     plot_traffic_map(traffic_map2, name = 'figures/traffic_map2.png')
-    
 
+    with open('variables/grid.pickle', 'wb') as file:
+        # Serialize and write the variable to the file
+        pickle.dump(grid, file)
