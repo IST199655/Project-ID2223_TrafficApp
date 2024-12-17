@@ -1,7 +1,6 @@
 import requests
 from shapely.geometry import LineString, Point
-from keys import TOMTOM_API_KEY, TOMTOM_API_KEY2, TOMTOM_API_KEY3
-from OpenStreetMapAPI import get_grid
+from functions.OpenStreetMapAPI import get_grid
 import matplotlib.pyplot as plt
 
 def get_traffic_flow(api_key, coordinates, zoom=12):
@@ -148,6 +147,7 @@ def plot_traffic_map(traffic_map, name = 'figures/traffic_map.png'):
 
 if __name__ == "__main__":
     import pickle
+    from keys import TOMTOM_API_KEY, TOMTOM_API_KEY2, TOMTOM_API_KEY3
 
     coordinates = 59.34318, 18.05141 # Stockholm
     radius = 1000

@@ -29,5 +29,5 @@ jobs:
 
       - name: Run update traffic notebook
         run: |
-          jupyter nbconvert --to notebook --execute --inplace notebooks/Update_features.ipynb
+          jupyter nbconvert --to notebook --execute --inplace notebooks/Update_hourly.ipynb
 
