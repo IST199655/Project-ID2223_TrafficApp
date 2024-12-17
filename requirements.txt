@@ -1,6 +1,9 @@
+numpy
 osmnx
 requests
 matplotlib
 openmeteo_requests
 requests-cache
 retry-requests
+hopsworks
+pandas

@@ -1,5 +1,5 @@
 import requests
-from shapely.geometry import LineString
+from shapely.geometry import LineString, Point
 from keys import TOMTOM_API_KEY, TOMTOM_API_KEY2, TOMTOM_API_KEY3
 from OpenStreetMapAPI import get_grid
 import matplotlib.pyplot as plt
@@ -59,19 +59,19 @@ def get_traffic_map(api_key, point, radius, zoom = 12):
 
     return traffic_map
 
-def get_grid_from_map(map):
+def get_grid_from_map_alt(map):
     grid = []
     for flow_segment in map:
         line_coords = [(point['longitude'], point['latitude']) for point in flow_segment['coordinates']['coordinate']]
-        line = LineString(line_coords)
-        midpoint = line.interpolate(0.5 * line.length)
+        m = len(line_coords)//2
+        midpoint = Point(line_coords[m])
         grid.append(midpoint)
 
     return grid
 
 import geopandas as gpd
 
-def get_grid_from_map_alt(map):
+def get_grid_from_map(map):
     """
     Efficiently calculates midpoints of flow segments in map_data.
     
