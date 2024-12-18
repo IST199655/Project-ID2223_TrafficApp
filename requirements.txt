@@ -8,3 +8,5 @@ retry-requests
 hopsworks
 pandas
 pyarrow
+confluent-kafka
+hopsworks[python]
