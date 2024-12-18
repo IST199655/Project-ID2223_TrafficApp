@@ -25,6 +25,9 @@ jobs:
           pip install -r requirements.txt
           pip install jupyter
 
+      - name: Set Python Path
+        run: echo "PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE" >> $GITHUB_ENV
+
       - name: Set environment variables for API Keys
         run: |
           echo "HOPSWORKS_API_KEY=${{ secrets.HOPSWORKS_API_KEY }}" >> $GITHUB_ENV
