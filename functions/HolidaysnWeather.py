@@ -1,16 +1,15 @@
 import datetime
 import requests
-from keys import CALENDAR_API_KEY
 import pandas as pd
 
 import openmeteo_requests
 import requests_cache
 from retry_requests import retry
 
-def is_holiday():
+def is_holiday(api_key):
     base_url = "https://calendarific.com/api/v2/holidays"
     today = datetime.datetime.now()
-    params = {'api_key': CALENDAR_API_KEY,
+    params = {'api_key': api_key,
               'country': 'se',
               'day': today.day,
               'month': today.month,
