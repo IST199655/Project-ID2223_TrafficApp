@@ -54,7 +54,11 @@ def get_weather(coordinates):
     daily = response.Daily()
 
     df = pd.DataFrame([], columns=features)
-    df.loc[pd.to_datetime(daily.Time(), unit="s")] = [daily.Variables(i).ValuesAsNumpy()[0] for i in range(len(features))]
+    date = pd.to_datetime(daily.Time(), unit="s")
+    now = datetime.datetime.now()
+    date = date.replace(second=0, microsecond=0, minute=0, hour=now.hour) + datetime.timedelta(hours=now.minute//30)
+    
+    df.loc[date] = [daily.Variables(i).ValuesAsNumpy()[0] for i in range(len(features))]
 
     return df
 
