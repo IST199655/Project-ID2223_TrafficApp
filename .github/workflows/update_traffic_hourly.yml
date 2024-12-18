@@ -31,6 +31,10 @@ jobs:
       - name: Set environment variables for API Keys
         run: |
           echo "HOPSWORKS_API_KEY=${{ secrets.HOPSWORKS_API_KEY }}" >> $GITHUB_ENV
+          echo "TOMTOM_API_KEY=${{ secrets.TOMTOM_API_KEY }}" >> $GITHUB_ENV
+          echo "TOMTOM_API_KEY2=${{ secrets.TOMTOM_API_KEY2 }}" >> $GITHUB_ENV
+          echo "TOMTOM_API_KEY3=${{ secrets.TOMTOM_API_KEY3 }}" >> $GITHUB_ENV
+          echo "CALENDAR_API_KEY=${{ secrets.CALENDAR_API_KEY }}" >> $GITHUB_ENV
 
       - name: Run update traffic notebook
         run: |
