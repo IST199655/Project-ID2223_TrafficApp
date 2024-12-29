@@ -1,13 +1,13 @@
 # Workflow 1: Update Traffic Information
-name: Update Traffic Information
+name: Update Model
 on:
   schedule:
-    - cron: '0 * * * *'  # Run every hour at the start of the hour
+    - cron: '0 0 * * 0'  # Run every Sunday at midnight UTC
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
   update_traffic:
-    name: Update Traffic Data
+    name: Update Model
     runs-on: ubuntu-latest
 
     steps:
@@ -31,13 +31,8 @@ jobs:
       - name: Set environment variables for API Keys
         run: |
           echo "HOPSWORKS_API_KEY=${{ secrets.HOPSWORKS_API_KEY }}" >> $GITHUB_ENV
-          echo "TOMTOM_API_KEY=${{ secrets.TOMTOM_API_KEY }}" >> $GITHUB_ENV
-          echo "TOMTOM_API_KEY2=${{ secrets.TOMTOM_API_KEY2 }}" >> $GITHUB_ENV
-          echo "TOMTOM_API_KEY3=${{ secrets.TOMTOM_API_KEY3 }}" >> $GITHUB_ENV
-          echo "CALENDAR_API_KEY=${{ secrets.CALENDAR_API_KEY }}" >> $GITHUB_ENV
 
       - name: Run update traffic notebook
         run: |
-          jupyter nbconvert --to notebook --execute --inplace notebooks/Update_hourly.ipynb
-          jupyter nbconvert --to notebook --execute --inplace notebooks/Inference.ipynb
+          jupyter nbconvert --to notebook --execute --inplace notebooks/Training.ipynb
 
