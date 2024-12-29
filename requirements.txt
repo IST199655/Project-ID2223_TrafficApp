@@ -10,3 +10,4 @@ pandas
 pyarrow
 confluent-kafka
 hopsworks[python]
+joblib
