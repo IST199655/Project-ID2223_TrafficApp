@@ -12,3 +12,4 @@ confluent-kafka
 hopsworks[python]
 joblib
 scikit-learn
+xgboost
