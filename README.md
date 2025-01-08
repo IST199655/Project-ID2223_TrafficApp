@@ -1,12 +1,5 @@
 # Serverless Traffic Prediction Machine Learning System
 
-<iframe
-  src="https://huggingface.co/spaces/Heit39/Stockholm_Traffic"
-  width="100%"
-  height="500"
-  frameborder="0"
-></iframe>
-
 ## Overview  
 This project leverages **Hopsworks** as the data management platform and **XGBoost** as the machine learning model to predict traffic conditions. The target variable for prediction is the **relative speed**, defined as:  
 
