@@ -10,13 +10,9 @@
 ## Overview  
 This project leverages **Hopsworks** as the data management platform and **XGBoost** as the machine learning model to predict traffic conditions. The target variable for prediction is the **relative speed**, defined as:  
 
-\[
-\text{Relative Speed} = \frac{\text{Current Drive Speed}}{\text{Flow Drive Speed}}
-\]  
-
 The system is designed for a location in **Stockholm**, near Odenplan, with the following coordinates:  **59.34318, 18.05141**.  
 
-The hugging face space with the UI is available [here](URL)
+The hugging face space with the UI is available [here](https://huggingface.co/spaces/Heit39/Stockholm_Traffic)
 
 ## Key Features  
 - **Data Preprocessing**: Includes cleaning and preparing traffic data for efficient analysis.  
