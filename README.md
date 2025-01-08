@@ -22,7 +22,7 @@ The repository is structured as follows:
 ```plaintext
 Project-ID2223_TrafficApp/  
 ├── notebooks/  
-│   ├── Startup.ipynb  # Jupyter notebook to 
+│   ├── Startup.ipynb  # Jupyter notebook to create segment map, feature stores and introduce first data
 │   ├── Update_hourly.ipynb     # Jupyter notebook to update features stores (called by a github action every hour)  
 │   ├── Training.ipynb     # Jupyter notebook for model training to update model registry(called by a github action every week)
 │   ├── Inference.ipynb     # Jupyter notebook for model inference (called by a github action every hour)
