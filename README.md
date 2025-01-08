@@ -94,7 +94,7 @@ The ML model operates in a fully automated pipeline with new data continuously f
 
 The MSE metric indicates good performance on training and testing data. However, the R² score suggests the model struggles to capture underlying patterns effectively, likely due to limited data.
 
-![Feature Importance](Images/Results/feature%20importance.png)
+![Feature Importance](Images/Results/feature_importance.png)
 
 Key features influencing predictions include:
 - **Hour**
