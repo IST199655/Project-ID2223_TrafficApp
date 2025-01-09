@@ -1,7 +1,11 @@
 # Serverless Traffic Prediction Machine Learning System
 
 ## Overview  
-This project leverages **Hopsworks** as the data management platform and **XGBoost** as the machine learning model to predict traffic conditions. The target variable for prediction is the **relative speed**, defined as:  
+This project leverages **Hopsworks** as the data management platform and **XGBoost** as the machine learning model to predict traffic conditions over each segment of a certain area. The target variable for prediction is the **relative speed**, defined as:  
+
+\[
+\text{Relative Speed} = \frac{\text{Current Drive Speed}}{\text{Flow Drive Speed}}
+\]  
 
 The system is designed for a location in **Stockholm**, near Odenplan, with the following coordinates:  **59.34318, 18.05141**.  
 
@@ -53,6 +57,8 @@ The development process of the prediction system was structured in several key s
 The data used to train and test the model comes from three sources: TomTom for traffic conditions, OpenMeteo for meteorological data, and Calendarific for holidays and events. These APIs were accessed through HTTP requests. OpenMeteo provides a library for processing requests, while custom processing was developed for TomTom and Calendarific. Handling the TomTom API was particularly challenging, leading to some missing data for segments within the area of interest, although the map is mostly complete. Each entry in the final dataset is identified by three primary keys: the time when the data was collected, the road segment type (frc), and the coordinate description of the road segment.
 
 Hopsworks was chosen as the data management platform for its efficient handling of large volumes of data and machine learning models, as well as its ease of use and accessibility.
+
+![Data collection](Images/Methodo/data.png)
 
 ### Data Preprocessing
 
