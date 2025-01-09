@@ -3,9 +3,8 @@
 ## Overview  
 This project leverages **Hopsworks** as the data management platform and **XGBoost** as the machine learning model to predict traffic conditions over each segment of a certain area. The target variable for prediction is the **relative speed**, defined as:  
 
-\[
-\text{Relative Speed} = \frac{\text{Current Drive Speed}}{\text{Flow Drive Speed}}
-\]  
+![Relative Speed Formula](https://latex.codecogs.com/png.latex?%5Ctext%7BRelative%20Speed%7D%20%3D%20%5Cfrac%7B%5Ctext%7BCurrent%20Drive%20Speed%7D%7D%7B%5Ctext%7BFlow%20Drive%20Speed%7D%7D)
+
 
 The system is designed for a location in **Stockholm**, near Odenplan, with the following coordinates:  **59.34318, 18.05141**.  
 
